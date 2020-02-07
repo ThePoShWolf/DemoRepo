@@ -6,8 +6,6 @@ $moduleName = $MyInvocation.MyCommand.Name.Split('.')[0]
 $modulePath = "$buildPath\$ModuleName"
 $version = '0.0.1'
 
-
-
 # Clean out any previous builds
 task Clean {
     if (Get-Module $moduleName) {
