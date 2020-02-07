@@ -26,10 +26,11 @@
 .NOTES
 	Author: ThePoShWolf
 	
-	To add registry directories, add to the lmKeys (LocalMachine)
+    To add registry directories, add to the lmKeys (LocalMachine)
+    
+    Microsoft.Win32.RegistryHive
+    Microsoft.Win32.RegistryKey
 .LINK
-	[Microsoft.Win32.RegistryHive]
-    [Microsoft.Win32.RegistryKey]
     https://github.com/theposhwolf/utilities
 #>
 Function Get-InstalledSoftware {
