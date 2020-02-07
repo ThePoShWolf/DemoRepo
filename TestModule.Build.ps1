@@ -23,7 +23,10 @@ task DocBuild {
 
 # Build the module
 task ModuleBuild Clean, DocBuild, {
+    # Grab all .ps1 files in .\src folder
     $moduleScriptFiles = Get-ChildItem $srcPath -Filter *.ps1 -File -Recurse
+
+    # Create the build\modulename folder if it doesn't exist
     if (-not(Test-Path $modulePath)) {
         New-Item $modulePath -ItemType Directory
     }
@@ -35,7 +38,7 @@ task ModuleBuild Clean, DocBuild, {
         }
     }
 
-    # Add all .ps1 files to the .psm1
+    # Add all .ps1 files to the .psm1 (except onload.ps1 and using.ps1)
     foreach ($file in $moduleScriptFiles | ?{$_.Name -ne 'onload.ps1' -and $_.Name -ne 'using.ps1'}) {
         if ($file.fullname) {
             Get-Content $file.fullname | Out-File "$modulePath\$moduleName.psm1" -Append -Encoding utf8
@@ -52,6 +55,7 @@ task ModuleBuild Clean, DocBuild, {
     # Copy the manifest
     Copy-Item "$srcPath\$moduleName.psd1" -Destination $modulePath
 
+    # Update the manifest
     $moduleManifestData = @{
         Path = "$modulePath\$moduleName.psd1"
         # Only export the public files
@@ -61,13 +65,16 @@ task ModuleBuild Clean, DocBuild, {
     Update-ModuleManifest @moduleManifestData
 }
 
+# Runs any pester tests
 Task Test ModuleBuild, {
     Import-Module $modulePath -RequiredVersion $version
     Invoke-Pester $testPath
 }
 
+# Publishes to the gallery
 task Publish Test, {
     Invoke-PSDeploy -Force
 }
 
+# Runs all tasks
 task All ModuleBuild, Publish
