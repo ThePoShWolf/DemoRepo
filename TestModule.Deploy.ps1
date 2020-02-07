@@ -1,9 +1,9 @@
-Deploy "$($MyInvocation.MyCommand.Name.Split('.')[0])" {
+Deploy "TestModule" {
     By PSGalleryModule {
-        FromSource "Build\$($MyInvocation.MyCommand.Name.Split('.')[0])"
+        FromSource "Build\TestModule"
         To PSGallery
         WithOptions @{
-            ApiKey = ''
+            ApiKey = (Get-Content C:\tmp\psgal.txt)
         }
     }
 }
