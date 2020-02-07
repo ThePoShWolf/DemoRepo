@@ -13,4 +13,7 @@ Invoke-Build -Task Publish
 # It finds all files *.psdeploy.ps1
 Invoke-PSDeploy -Force
 
+# Use our build script to do EVERYTHING
+Invoke-Build -Take Publish
+
 #endregion
